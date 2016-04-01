@@ -1,5 +1,5 @@
 {
-  "name": "FreedomCore/VKAPI",
+  "name": "freedomcore/vk-api",
   "type": "library",
   "description": "FreedomCore VK API Library",
   "keywords": ["official", "library", "api", "freedomcore", "vk", "vkontakte"],
