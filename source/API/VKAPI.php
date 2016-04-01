@@ -55,7 +55,7 @@ class VKAPI {
      * @throws VKException
      */
     protected function isAllowed($requiredPermission = null) {
-        if ($requiredPermission != null){
+        if ($requiredPermission != null) {
             try {
                 $isValidPermission = $this->VKObject->getPermissionsMask() & $requiredPermission;
                 if (!$isValidPermission) {

@@ -95,7 +95,7 @@ class VKBase {
             if (!$this->isPermissionsMaskSet) {
                 $VKUser = new VKUsers($this);
                 $VKAccount = new VKAccount($this);
-                $CurrentUser = $VKUser->get([ '' ])[ 'response' ][0][ 'uid' ];
+                $CurrentUser = $VKUser->get([ '' ])[ 'response' ][ 0 ][ 'uid' ];
                 $this->setPermissionsMask($VKAccount->getAppPermissions($CurrentUser)[ 'response' ]);
                 $this->isPermissionsMaskSet = true;
                 unset($VKUser);
@@ -126,7 +126,7 @@ class VKBase {
      * @return string
      */
     public function getAPIUrl($apiMethod, $responseFormat = 'json') {
-        return self::METHOD_URL . $apiMethod . '.' . $responseFormat;
+        return self::METHOD_URL . $apiMethod.'.'.$responseFormat;
     }
 
     /**
@@ -176,7 +176,7 @@ class VKBase {
 
         try {
             if (isset($apiResponse[ 'error' ])) {
-                throw new VKException($apiResponse[ 'error' ] . (!isset($apiResponse[ 'error_description' ]) ?: ': ' . $apiResponse[ 'error_description' ]), '0');
+                throw new VKException($apiResponse[ 'error' ].(!isset($apiResponse[ 'error_description' ]) ?: ': '.$apiResponse[ 'error_description' ]), '0');
             } else {
                 $this->authorizationStatus = true;
                 $this->accessToken = $apiResponse[ 'access_token' ];
@@ -184,7 +184,7 @@ class VKBase {
             }
         } catch (VKException $ex) {
             echo $ex->getMessage();
-            return [];
+            return [ ];
         }
     }
 
@@ -205,7 +205,7 @@ class VKBase {
      * @param string $requestMethod
      * @return mixed
      */
-    public function apiQuery($apiMethod, $requestParameters = [], $resultType = 'array', $requestMethod = 'get') {
+    public function apiQuery($apiMethod, $requestParameters = [ ], $resultType = 'array', $requestMethod = 'get') {
         $requestParameters[ 'timestamp' ] = time();
         $requestParameters[ 'api_id' ]    = $this->applicationID;
         $requestParameters[ 'random' ]    = rand(0, 10000);
@@ -246,7 +246,7 @@ class VKBase {
             return $resultType == 'array' ? $decodedJSON : $apiResponse;
         } catch(VKException $ex) {
             echo $ex->getMessage();
-            return [];
+            return [ ];
         }
     }
 
@@ -284,7 +284,7 @@ class VKBase {
      * @param array $postFields
      * @return string
      */
-    private function performRequest($requestURL, $requestMethod = 'GET', $postFields = []) {
+    private function performRequest($requestURL, $requestMethod = 'GET', $postFields = [ ]) {
         curl_setopt_array($this->curlObject, [
             CURLOPT_USERAGENT       =>  'FreedomCore/' . self::PACKAGE_VERSION . ' VK OAuth Client',
             CURLOPT_RETURNTRANSFER  => true,

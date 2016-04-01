@@ -122,7 +122,7 @@ class VKAccount extends VKAPI {
         ];
         
         foreach ($filtersArray as $fKey => $fValue) { 
-            if(!in_array($fValue, $existingFilters)) {
+            if (!in_array($fValue, $existingFilters)) {
                 unset($filtersArray[ $fKey ]); 
             }
         }
