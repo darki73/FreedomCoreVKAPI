@@ -1,0 +1,31 @@
+{
+  "name": "FreedomCore/VKAPI",
+  "type": "library",
+  "description": "FreedomCore VK API Library",
+  "keywords": ["official", "library", "api", "freedomcore", "vk", "vkontakte"],
+  "license": "CC-BY-SA",
+  "version": "1.0.0",
+  "homepage": "https://packages.freedomcore.ru/vk",
+  "authors": [
+    {
+      "name": "darki73",
+      "email": "support@freedomcore.ru",
+      "homepage": "https://freedomcore.ru",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+        "issues": "https://github.com/darki73/FreedomCoreVKAPI/issues",
+        "source": "https://github.com/darki73/FreedomCoreVKAPI"
+    },
+  "require": {
+    "php": ">=5.6",
+    "ext-pdo": "*",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "FreedomCore\\VK\\": "source/"
+    }
+  }
+}
