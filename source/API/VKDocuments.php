@@ -17,7 +17,7 @@ class VKDocuments extends VKAPI {
      * VKDocuments constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         parent::__construct($vkObject);
     }
 
@@ -29,7 +29,7 @@ class VKDocuments extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function get($ownerID, $setCount = 10, $setOffset = 0){
+    public function get($ownerID, $setCount = 10, $setOffset = 0) {
         parent::isAllowed();
         $requestParameters = [
             'owner_id'  =>  $ownerID,
@@ -45,7 +45,7 @@ class VKDocuments extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function getById($documentIDorArray){
+    public function getById($documentIDorArray) {
         parent::isAllowed();
         $requestParameters = [
             'docs'  =>  (is_array($documentIDorArray)) ? implode(',', $documentIDorArray) : $documentIDorArray
@@ -59,7 +59,7 @@ class VKDocuments extends VKAPI {
      * @param $communityID
      * @return mixed
      */
-    public function getUploadServer($communityID){
+    public function getUploadServer($communityID) {
         parent::isAllowed();
         $requestParameters = [
             'group_id'  =>  $communityID

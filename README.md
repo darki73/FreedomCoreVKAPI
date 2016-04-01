@@ -1,5 +1,6 @@
 # [PHP] FreedomCore VK API
-
+[![Build Status](https://scrutinizer-ci.com/g/darki73/FreedomCoreVKAPI/badges/build.png?b=master)](https://scrutinizer-ci.com/g/darki73/FreedomCoreVKAPI/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/darki73/FreedomCoreVKAPI/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/darki73/FreedomCoreVKAPI/?branch=master)
 [![Latest Stable Version](https://img.shields.io/packagist/v/freedomcore/vk-api.svg)](https://packagist.org/packages/freedomcore/vk-api)
 [![Total Downloads](https://img.shields.io/packagist/dt/freedomcore/vk-api.svg)](https://packagist.org/packages/freedomcore/vk-api)
 [![Downloads Month](https://img.shields.io/packagist/dm/freedomcore/vk-api.svg)](https://packagist.org/packages/freedomcore/vk-api)

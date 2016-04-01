@@ -235,7 +235,7 @@ class VKGroups extends VKAPI {
         if ($groupType != 'public') { 
             $requestParameters['description'] = $groupDescription; 
         }
-        if ($subType != null) { 
+        if ($subType !== null) { 
             $requestParameters['subtype'] = ($subType > 4 || $subType < 1) ? 2 : $subType;
         }
 

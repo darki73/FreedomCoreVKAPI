@@ -72,7 +72,7 @@ class VKAccount extends VKAPI {
      * @return mixed
      */
     public function setOffline() {
-        return $this->executeQuery(__FUNCTION__, []);
+        return $this->executeQuery(__FUNCTION__, [ ]);
     }
 
     /**
@@ -123,7 +123,7 @@ class VKAccount extends VKAPI {
         
         foreach ($filtersArray as $fKey => $fValue) { 
             if(!in_array($fValue, $existingFilters)) {
-                unset($filtersArray[$fKey]); 
+                unset($filtersArray[ $fKey ]); 
             }
         }
         return implode(',', $filtersArray);
