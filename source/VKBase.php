@@ -77,7 +77,7 @@ class VKBase {
 
     const DEFAULT_CALLBACK = 'https://api.vk.com/blank.html';
 
-    const PACKAGE_VERSION = '1.0.0';
+    const PACKAGE_VERSION = '1.0.5';
 
     /**
      * VK constructor.
