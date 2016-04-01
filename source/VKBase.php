@@ -86,13 +86,13 @@ class VKBase {
      * @param string $accessToken
      * @throws VKException
      */
-    public function __construct($appID, $apiSecret, $accessToken = null){
+    public function __construct($appID, $apiSecret, $accessToken = null) {
         $this->applicationID = $appID;
         $this->APISecret = $apiSecret;
         $this->accessToken = $accessToken;
         $this->curlObject = curl_init();
-        if(!is_null($accessToken)){
-            if(!$this->isPermissionsMaskSet){
+        if (!is_null($accessToken)) {
+            if (!$this->isPermissionsMaskSet) {
                 $VKUser = new VKUsers($this);
                 $VKAccount = new VKAccount($this);
                 $CurrentUser = $VKUser->get([''])['response'][0]['uid'];
@@ -115,7 +115,7 @@ class VKBase {
      * Set API Version Provided By User
      * @param int $apiVersion
      */
-    public function setAPIVersion($apiVersion){
+    public function setAPIVersion($apiVersion) {
         $this->APIVersion = $apiVersion;
     }
 
@@ -125,7 +125,7 @@ class VKBase {
      * @param string $responseFormat
      * @return string
      */
-    public function getAPIUrl($apiMethod, $responseFormat = 'json'){
+    public function getAPIUrl($apiMethod, $responseFormat = 'json') {
         return self::METHOD_URL . $apiMethod . '.' . $responseFormat;
     }
 
@@ -137,7 +137,7 @@ class VKBase {
      * @param bool $testMode
      * @return string
      */
-    public function getAuthorizationURL($apiSettings = '', $callbackURL = self::DEFAULT_CALLBACK, $responseType = 'code', $testMode = false){
+    public function getAuthorizationURL($apiSettings = '', $callbackURL = self::DEFAULT_CALLBACK, $responseType = 'code', $testMode = false) {
         $allowedTypes = ['token', 'code'];
         $requestParameters = [
             'client_id'     =>  $this->applicationID,
@@ -146,7 +146,7 @@ class VKBase {
             'response_type' =>  (in_array($responseType, $allowedTypes)) ? $responseType : 'code'
         ];
 
-        if($testMode) $requestParameters['test_mode'] = 1;
+        if ($testMode) $requestParameters['test_mode'] = 1;
 
         return $this->createURL(self::AUTHORIZATION_URL, $requestParameters);
     }
@@ -158,8 +158,8 @@ class VKBase {
      * @return mixed
      * @throws VKException
      */
-    public function getAccessToken($resultCode, $callbackURL = self::DEFAULT_CALLBACK){
-        if(!is_null($this->accessToken) && $this->authorizationStatus) {
+    public function getAccessToken($resultCode, $callbackURL = self::DEFAULT_CALLBACK) {
+        if (!is_null($this->accessToken) && $this->authorizationStatus) {
             throw new VKException('Already Authorized!', 1);
         }
 
@@ -173,14 +173,14 @@ class VKBase {
         $apiResponse = json_decode($this->performRequest($this->createURL(self::ACCESS_TOKEN_URL, $requestParameters)), true);
 
         try {
-            if(isset($apiResponse['error'])) {
+            if (isset($apiResponse['error'])) {
                 throw new VKException($apiResponse['error'] . (!isset($apiResponse['error_description']) ?: ': ' . $apiResponse['error_description']), '0');
             } else {
                 $this->authorizationStatus = true;
                 $this->accessToken = $apiResponse['access_token'];
                 return $apiResponse;
             }
-        } catch (VKException $ex){
+        } catch (VKException $ex) {
             echo $ex->getMessage();
             return [];
         }
@@ -190,7 +190,7 @@ class VKBase {
      * Returns User Authorization Status
      * @return bool
      */
-    public function isAuthorized(){
+    public function isAuthorized() {
         return !is_null($this->accessToken);
     }
 
@@ -203,32 +203,33 @@ class VKBase {
      * @param string $requestMethod
      * @return mixed
      */
-    public function apiQuery($apiMethod, $requestParameters = [], $resultType = 'array', $requestMethod = 'get'){
+    public function apiQuery($apiMethod, $requestParameters = [], $resultType = 'array', $requestMethod = 'get') {
         $requestParameters['timestamp'] = time();
         $requestParameters['api_id']    = $this->applicationID;
         $requestParameters['random']    = rand(0, 10000);
 
-        if(!array_key_exists('access_token', $requestParameters) && !is_null($this->accessToken)) {
+        if (!array_key_exists('access_token', $requestParameters) && !is_null($this->accessToken)) {
             $requestParameters['access_token'] = $this->accessToken;
         }
 
-        if(!array_key_exists('v', $requestParameters) && !is_null($this->APIVersion)) {
+        if (!array_key_exists('v', $requestParameters) && !is_null($this->APIVersion)) {
             $requestParameters['v'] = $this->APIVersion;
         }
 
         ksort($requestParameters);
 
         $parametersSignature = '';
-        foreach($requestParameters as $pKey=>$pValue){
-            if(is_array($pValue))
+        foreach ($requestParameters as $pKey=>$pValue) {
+            if (is_array($pValue)) {
                 $pValue = implode(', ', $pValue);
+            }
             $parametersSignature .= $pKey . '=' . $pValue;
         }
         $parametersSignature .= $this->APISecret;
 
         $requestParameters['sig'] = md5($parametersSignature);
 
-        if($apiMethod == 'execute' || $requestMethod == 'post'){
+        if ($apiMethod == 'execute' || $requestMethod == 'post') {
             $apiResponse = $this->performRequest($this->getAPIUrl($apiMethod, $resultType == 'array' ? 'json' : $resultType), "POST", $requestParameters);
         } else {
             $apiResponse = $this->performRequest($this->createURL($this->getAPIUrl($apiMethod, $resultType == 'array' ? 'json' : $resultType), $requestParameters));
@@ -236,11 +237,12 @@ class VKBase {
 
         try {
             $decodedJSON = json_decode($apiResponse, true);
-            if(isset($decodedJSON['error']))
+            if (isset($decodedJSON['error'])) {
                 throw new VKException($decodedJSON['error']['error_msg'], $decodedJSON['error']['error_code'], $decodedJSON['error']['request_params']);
+            }
 
             return $resultType == 'array' ? $decodedJSON : $apiResponse;
-        } catch(VKException $ex){
+        } catch(VKException $ex) {
             echo $ex->getMessage();
             return [];
         }
@@ -250,7 +252,7 @@ class VKBase {
      * Set Permissions Mask
      * @param int $permMask
      */
-    public function setPermissionsMask($permMask){
+    public function setPermissionsMask($permMask) {
         $this->permissionsMask = $permMask;
     }
 
@@ -258,7 +260,7 @@ class VKBase {
      * Get Permissions Mask
      * @return int
      */
-    public function getPermissionsMask(){
+    public function getPermissionsMask() {
         return $this->permissionsMask;
     }
 
@@ -268,7 +270,7 @@ class VKBase {
      * @param array $parametersArray
      * @return string
      */
-    private function createURL($urlString, $parametersArray){
+    private function createURL($urlString, $parametersArray) {
         $urlString .= '?' . http_build_query($parametersArray);
         return $urlString;
     }
@@ -280,7 +282,7 @@ class VKBase {
      * @param array $postFields
      * @return string
      */
-    private function performRequest($requestURL, $requestMethod = 'GET', $postFields = []){
+    private function performRequest($requestURL, $requestMethod = 'GET', $postFields = []) {
         curl_setopt_array($this->curlObject, [
             CURLOPT_USERAGENT       =>  'FreedomCore/' . self::PACKAGE_VERSION . ' VK OAuth Client',
             CURLOPT_RETURNTRANSFER  => true,
@@ -315,11 +317,11 @@ class VKException extends \Exception {
         $APIError = $this->codeToErrorText($code);
         $Message .= '<tr><td width="10%"><strong>API Message:</strong></td> <td>'.$APIError['title'].' <span style="color: gray;">('.$APIError['description'].')</span></td></tr>';
         $Message .= '<tr><td width="10%"><strong>Error Message:</strong></td> <td>'.$message.'</td></tr>';
-        if($parameters != null && is_array($parameters)){
+        if ($parameters != null && is_array($parameters)) {
             $Message .= '<tr><td width="10%"><strong>Request Parameters:</strong></td> <td>';
 
             $Message .= '<table width="15%">';
-            foreach($parameters as $parameter){
+            foreach ($parameters as $parameter) {
                 $Message .= "<tr><td><strong>".$parameter['key']."</strong></td><td width='15%'>=></td><td>".$parameter['value']."</td></tr>";
             }
             $Message .= '</table>';
@@ -332,10 +334,10 @@ class VKException extends \Exception {
 
     /**
      * Convert INT Code To Full Description
-     * @param $Code
+     * @param int $Code
      * @return mixed
      */
-    private function codeToErrorText($Code){
+    private function codeToErrorText($Code) {
         $errorsData = [
             1       =>  ['title' => 'Unknown error occurred',  'description' => 'Try again later.'],
             2       =>  ['title' => 'Application is disabled. Enable your application or use test mode ',  'description' => 'You need to switch on the app in Settings (https://vk.com/editapp?id={Your API_ID} or use the test mode (test_mode=1).'],

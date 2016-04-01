@@ -15,13 +15,13 @@ class VKAccount extends VKAPI {
     /**
      * Default Filters To Be Used
      */
-    const defaultFilters = ['friends', 'messages', 'groups'];
+    const defaultFilters = [ 'friends', 'messages', 'groups' ];
 
     /**
      * VKAccount constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         parent::__construct($vkObject);
         parent::isAllowed();
     }
@@ -31,7 +31,7 @@ class VKAccount extends VKAPI {
      * @param array $selectedFilters
      * @return array
      */
-    public function getCounters($selectedFilters = self::defaultFilters){
+    public function getCounters($selectedFilters = self::defaultFilters) {
         $requestParameters = [
             'filter'    =>  $this->getAllowedFilters($selectedFilters)
         ];
@@ -45,7 +45,7 @@ class VKAccount extends VKAPI {
      * @param $applicationName
      * @return mixed
      */
-    public function setNameInMenu($userID, $applicationName){
+    public function setNameInMenu($userID, $applicationName) {
         $requestParameters = [
             'user_id'   =>  $userID,
             'name'      =>  $applicationName
@@ -59,7 +59,7 @@ class VKAccount extends VKAPI {
      * (This method is available only to standalone-applications.)
      * @return mixed
      */
-    public function setOnline(){
+    public function setOnline() {
         $requestParameters = [
             'voip'  =>  1
         ];
@@ -71,7 +71,7 @@ class VKAccount extends VKAPI {
      * (This method is available only to standalone-applications.)
      * @return mixed
      */
-    public function setOffline(){
+    public function setOffline() {
         return $this->executeQuery(__FUNCTION__, []);
     }
 
@@ -81,7 +81,7 @@ class VKAccount extends VKAPI {
      * @param int $setCount
      * @return array
      */
-    public function getActiveOffers($setOffset = 0, $setCount = 100){
+    public function getActiveOffers($setOffset = 0, $setCount = 100) {
         $requestParameters = [
             'offset'        =>  $setOffset,
             'count'         =>  ($setCount > 100 || $setCount < 0) ? 100 : $setCount
@@ -95,7 +95,7 @@ class VKAccount extends VKAPI {
      * @param int $userID
      * @return mixed
      */
-    public function getAppPermissions($userID){
+    public function getAppPermissions($userID) {
         $requestParameters = [
             'user_id'   =>  $userID
         ];
@@ -108,7 +108,7 @@ class VKAccount extends VKAPI {
      * @param $filtersArray
      * @return string
      */
-    private function getAllowedFilters($filtersArray){
+    private function getAllowedFilters($filtersArray) {
         $existingFilters = [
             'friends',
             'messages',
@@ -120,7 +120,12 @@ class VKAccount extends VKAPI {
             'groups',
             'sdk'
         ];
-        foreach($filtersArray as $fKey => $fValue){ if(!in_array($fValue, $existingFilters)) unset($filtersArray[$fKey]); }
+        
+        foreach ($filtersArray as $fKey => $fValue) { 
+            if(!in_array($fValue, $existingFilters)) {
+                unset($filtersArray[$fKey]); 
+            }
+        }
         return implode(',', $filtersArray);
     }
 }

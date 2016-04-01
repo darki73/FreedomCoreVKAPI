@@ -44,32 +44,34 @@ class VKAPI {
      * VKUsers constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         $this->VKObject = $vkObject;
     }
 
     /**
      * Is User Authorized To Make an API Request
      * @param int $requiredPermission
-     * @return bool
+     * @return boolean|null
      * @throws VKException
      */
-    protected function isAllowed($requiredPermission = null){
-        if($requiredPermission != null){
+    protected function isAllowed($requiredPermission = null) {
+        if ($requiredPermission != null){
             try {
                 $isValidPermission = $this->VKObject->getPermissionsMask() & $requiredPermission;
-                if(!$isValidPermission)
+                if (!$isValidPermission) {
                     throw new VKException('Insufficient Permissions Received!', 1);
-            } catch (VKException $ex){
+                }
+            } catch (VKException $ex) {
                 echo $ex->getMessage();
                 die();
             }
         }
 
         try {
-            if(!$this->VKObject->isAuthorized())
+            if (!$this->VKObject->isAuthorized()) {
                 throw new VKException('User not Authorized to make this API Request!', 1);
-        } catch (VKException $ex){
+            }
+        } catch (VKException $ex) {
             echo $ex->getMessage();
             die();
         }
@@ -77,11 +79,11 @@ class VKAPI {
 
     /**
      * Execute API Call
-     * @param $apiMethod
+     * @param string $apiMethod
      * @param $requestParameters
      * @return mixed
      */
-    protected function executeQuery($apiMethod, $requestParameters){
+    protected function executeQuery($apiMethod, $requestParameters) {
         return $this->VKObject->apiQuery($this->apiMethod.$apiMethod, $requestParameters);
     }
 }

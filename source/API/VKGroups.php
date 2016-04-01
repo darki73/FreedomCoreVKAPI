@@ -21,13 +21,13 @@ class VKGroups extends VKAPI {
     /**
      * Default Fields For Selection
      */
-    const defaultFields = ['description', 'members_count', 'status', 'contacts'];
+    const defaultFields = [ 'description', 'members_count', 'status', 'contacts' ];
 
     /**
      * VKGroups constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         parent::__construct($vkObject);
         parent::isAllowed($this->requiredPermission);
     }
@@ -39,7 +39,7 @@ class VKGroups extends VKAPI {
      * @param int $isExtended
      * @return mixed
      */
-    public function isMember($groupID, $userID, $isExtended = 0){
+    public function isMember($groupID, $userID, $isExtended = 0) {
         $requestParameters = [
             'group_id'      =>  $groupID,
             'user_id'       =>  $userID,
@@ -55,12 +55,16 @@ class VKGroups extends VKAPI {
      * @param array $requestFields
      * @return mixed
      */
-    public function getById($groupID, $requestFields = self::defaultFields){
+    public function getById($groupID, $requestFields = self::defaultFields) {
         $requestParameters = [
             'fields'    => $this->getAllowedFields($requestFields)
         ];
-        if(is_array($groupID))  $requestParameters['group_ids'] = implode(',', $groupID);
-        else $requestParameters['group_id'] = $groupID;
+
+        if (is_array($groupID)) {
+            $requestParameters['group_ids'] = implode(',', $groupID);
+        } else {
+            $requestParameters['group_id'] = $groupID;
+        }
 
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -73,14 +77,16 @@ class VKGroups extends VKAPI {
      * @param array $requestFields
      * @return mixed
      */
-    public function get($userID, $isExtended = 0, $setFilter = null, $requestFields = self::defaultFields){
+    public function get($userID, $isExtended = 0, $setFilter = null, $requestFields = self::defaultFields) {
         $allowedFilterTypes = ['admin', 'editor', 'moder', 'groups', 'publics', 'events'];
         $requestParameters = [
             'user_id'   =>  $userID,
             'extended'  =>  ($isExtended > 1 || $isExtended < 0) ? 0 : $isExtended,
             'fields'    =>  $this->getAllowedFields($requestFields)
         ];
-        if($setFilter != null && in_array($setFilter, $allowedFilterTypes)){ $requestParameters['filter'] = $setFilter; }
+        if ($setFilter != null && in_array($setFilter, $allowedFilterTypes)) { 
+            $requestParameters['filter'] = $setFilter; 
+        }
 
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -91,7 +97,7 @@ class VKGroups extends VKAPI {
      * @param array $requestFields
      * @return mixed
      */
-    public function getMembers($groupID, $requestFields = VKUsers::standardFields){
+    public function getMembers($groupID, $requestFields = VKUsers::standardFields) {
         $requestParameters = [
             'group_id'  =>  $groupID,
             'fields'    =>  $requestFields
@@ -106,9 +112,13 @@ class VKGroups extends VKAPI {
      * @param null $ifMeeting
      * @return mixed
      */
-    public function join($groupID, $ifMeeting = null){
+    public function join($groupID, $ifMeeting = null) {
         $requestParameters['group_id'] = $groupID;
-        if($ifMeeting != null){ if($ifMeeting == 1 || $ifMeeting == 0) { $requestParameters['not_sure']  =   $ifMeeting; } }
+        if ($ifMeeting != null){ 
+            if ($ifMeeting == 1 || $ifMeeting == 0) { 
+                $requestParameters['not_sure']  =   $ifMeeting; 
+            } 
+        }
 
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -132,7 +142,9 @@ class VKGroups extends VKAPI {
      */
     public function search($searchQuery, $groupType = null) {
         $requestParameters['q'] = $searchQuery;
-        if($groupType != null && in_array($groupType, ['group', 'page', 'event'])) { $requestParameters['type'] = $groupType; }
+        if ($groupType != null && in_array($groupType, ['group', 'page', 'event'])) { 
+            $requestParameters['type'] = $groupType; 
+        }
 
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -142,7 +154,7 @@ class VKGroups extends VKAPI {
      * @param int $isExtended
      * @return mixed
      */
-    public function getInvites($isExtended = 0){
+    public function getInvites($isExtended = 0) {
         $requestParameters['extended'] = ($isExtended > 1 || $isExtended < 0) ? 0 : $isExtended;
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -153,7 +165,7 @@ class VKGroups extends VKAPI {
      * @param array $requestFields
      * @return mixed
      */
-    public function getInvitedUsers($groupID, $requestFields = VKUsers::standardFields){
+    public function getInvitedUsers($groupID, $requestFields = VKUsers::standardFields) {
         $requestParameters = [
             'group_id'  => $groupID,
             'fields ' => $requestFields
@@ -170,7 +182,7 @@ class VKGroups extends VKAPI {
      * @param int $endDateTimeStamp - Unix Time
      * @param int $commentVisible - Show Comment To User (1 - Yes | 0 - No)
      */
-    public function banUser($groupID, $userID, $banReason = 0, $banComment = '', $endDateTimeStamp = null, $commentVisible = 1){
+    public function banUser($groupID, $userID, $banReason = 0, $banComment = '', $endDateTimeStamp = null, $commentVisible = 1) {
         $requestParameters = [
             'group_id'          =>  $groupID,
             'user_id'           =>  $userID,
@@ -189,7 +201,7 @@ class VKGroups extends VKAPI {
      * @param int $userID
      * @return mixed
      */
-    public function unbanUser($groupID, $userID){
+    public function unbanUser($groupID, $userID) {
         $requestParameters = [
             'group_id'  => $groupID,
             'user_id'   => $userID
@@ -202,7 +214,7 @@ class VKGroups extends VKAPI {
      * @param int $groupID
      * @return mixed
      */
-    public function getBanned($groupID){
+    public function getBanned($groupID) {
         return parent::executeQuery(__FUNCTION__, ['group_id' => $groupID]);
     }
 
@@ -214,14 +226,18 @@ class VKGroups extends VKAPI {
      * @param int $subType
      * @return mixed
      */
-    public function create($groupTitle, $groupDescription, $groupType = 'group', $subType = null){
+    public function create($groupTitle, $groupDescription, $groupType = 'group', $subType = null) {
         $allowedGroupTypes = ['group', 'event', 'public'];
         $requestParameters = [
             'title'     =>  $groupTitle,
             'type'      =>  (in_array($groupType, $allowedGroupTypes)) ? $groupType : 'group'
         ];
-        if($groupType != 'public') { $requestParameters['description'] = $groupDescription; }
-        if($subType != null) { $requestParameters['subtype'] = ($subType > 4 || $subType < 1) ? 2 : $subType;}
+        if ($groupType != 'public') { 
+            $requestParameters['description'] = $groupDescription; 
+        }
+        if ($subType != null) { 
+            $requestParameters['subtype'] = ($subType > 4 || $subType < 1) ? 2 : $subType;
+        }
 
         return parent::executeQuery(__FUNCTION__, $requestParameters);
     }
@@ -255,7 +271,7 @@ class VKGroups extends VKAPI {
      * @param int $groupID
      * @return mixed
      */
-    public function getSettings($groupID){
+    public function getSettings($groupID) {
         return parent::executeQuery(__FUNCTION__, ['group_id' => $groupID]);
     }
 
@@ -267,8 +283,10 @@ class VKGroups extends VKAPI {
      * @return array
      */
     public function getRequests($groupID, $requestFields = null, $setCount = 20) {
-        if($requestFields == null)
+        if ($requestFields == null) {
             $requestFields = VKUsers::standardFields;
+        }
+
         $requestParameters = [
             'group_id'  =>  $groupID,
             'fields'    =>  $requestFields,
@@ -297,7 +315,7 @@ class VKGroups extends VKAPI {
      * @param int $userID
      * @return mixed
      */
-    public function removeUser($groupID, $userID){
+    public function removeUser($groupID, $userID) {
         $requestParameters = [
             'group_id'  =>  $groupID,
             'user_id'   =>  $userID
@@ -311,7 +329,7 @@ class VKGroups extends VKAPI {
      * @param int $userID
      * @return mixed
      */
-    public function approveRequest($groupID, $userID){
+    public function approveRequest($groupID, $userID) {
         $requestParameters = [
             'group_id'  =>  $groupID,
             'user_id'   =>  $userID
@@ -325,7 +343,7 @@ class VKGroups extends VKAPI {
      * @param $fieldsArray
      * @return string
      */
-    private function getAllowedFields($fieldsArray){
+    private function getAllowedFields($fieldsArray) {
         $groupsFields = [
             'group_id',
             'name',
@@ -354,7 +372,11 @@ class VKGroups extends VKAPI {
             'contacts'
         ];
 
-        foreach($fieldsArray as $fKey => $fValue){ if(!in_array($fValue, $groupsFields)) unset($fieldsArray[$fKey]); }
+        foreach($fieldsArray as $fKey => $fValue) {
+            if (!in_array($fValue, $groupsFields)) {
+                unset($fieldsArray[$fKey]);
+            }
+        }
         return implode(',', $fieldsArray);
     }
 }

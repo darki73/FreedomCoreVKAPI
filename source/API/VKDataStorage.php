@@ -22,7 +22,7 @@ class VKDataStorage extends VKAPI {
      * VKDataStorage constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         parent::__construct($vkObject);
     }
 
@@ -35,7 +35,7 @@ class VKDataStorage extends VKAPI {
      * @throws VKException
      * @return array
      */
-    protected function get($storageKey, $storageKeys, $userID, $isGlobal){
+    protected function get($storageKey, $storageKeys, $userID, $isGlobal) {
         parent::isAllowed();
         $requestParameters = [
             'key'       =>  substr($storageKey, 0, 100),
@@ -56,7 +56,7 @@ class VKDataStorage extends VKAPI {
      * @throws VKException
      * @return array
      */
-    protected function set($storageKey, $keyValue, $userID, $isGlobal){
+    protected function set($storageKey, $keyValue, $userID, $isGlobal) {
         parent::isAllowed();
         $requestParameters = [
             'key'       =>  substr($storageKey, 0, 100),
@@ -77,7 +77,7 @@ class VKDataStorage extends VKAPI {
      * @throws VKException
      * @return array
      */
-    protected function getKeys($userID, $isGlobal, $setOffset = 0, $returnResult = 100){
+    protected function getKeys($userID, $isGlobal, $setOffset = 0, $returnResult = 100) {
         parent::isAllowed();
         $requestParameters = [
             'user_id'   =>  $userID,

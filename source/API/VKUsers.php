@@ -20,30 +20,32 @@ class VKUsers extends VKAPI {
     /**
      * Default Fields For Selection
      */
-    const standardFields = ['sex', 'online', 'country', 'city', 'bdate'];
+    const standardFields = [ 'sex', 'online', 'country', 'city', 'bdate' ];
 
     /**
      * VKUsers constructor.
      * @param VKBase $vkObject
      */
-    public function __construct(VKBase $vkObject){
+    public function __construct(VKBase $vkObject) {
         parent::__construct($vkObject);
+        parent::isAllowed();
     }
 
     /**
      * Returns detailed information on users
-     * @param array $usersIDs
+     * @param string[] $usersIDs
      * @param array $requestFields
      * @param string $nameCase
      * @return mixed
      * @throws VKException
      */
     public function get($usersIDs, $requestFields = self::standardFields, $nameCase = 'nom') {
-        parent::isAllowed();
-        if(!is_array($usersIDs))
+        if (!is_array($usersIDs)) {
             throw new VKException('First Parameters Must Be Represented By Array Of Users IDs', 1);
-        if(!is_array($requestFields))
+        }
+        if (!is_array($requestFields)) {
             throw new VKException('Second Parameters Must Be Represented By Array Of Fields To Be Requested', 1);
+        }
 
         $requestParameters = [
             'user_ids'      =>  implode(',',$usersIDs),
@@ -65,9 +67,10 @@ class VKUsers extends VKAPI {
      * @throws VKException
      */
     public function search($searchQuery, $isOnline = 1, $requestFields = self::standardFields, $sortBy = 0, $displayCount = 5) {
-        parent::isAllowed();
-        if(!is_array($requestFields))
+        if (!is_array($requestFields)) {
             throw new VKException('Forth Parameters Must Be Represented By Array Of Fields To Be Requested', 1);
+        }
+
         $requestFields = $this->returnAllowedFields($requestFields);
         $sortBy = ($sortBy > 1 || $sortBy < 0) ? 0 : $sortBy;
         $isOnline = ($isOnline > 1 || $isOnline < 0) ? 1 : $isOnline;
@@ -89,8 +92,7 @@ class VKUsers extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function isAppUser($userID){
-        parent::isAllowed();
+    public function isAppUser($userID) {
         $requestParameters = [
             'user_id'   =>  $userID
         ];
@@ -107,8 +109,7 @@ class VKUsers extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function getSubscriptions($userID, $combineResults = 0, $requestFields = self::standardFields, $resultCount = 20){
-        parent::isAllowed();
+    public function getSubscriptions($userID, $combineResults = 0, $requestFields = self::standardFields, $resultCount = 20) {
         $requestParameters = [
             'user_id'   =>  $userID,
             'extended'  =>  ($combineResults > 1 || $combineResults < 0) ? 0 : $combineResults,
@@ -129,8 +130,7 @@ class VKUsers extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function getFollowers($userID, $setOffset = 0, $displayCount = 100, $requestFields = self::standardFields, $nameCase = 'nom'){
-        parent::isAllowed();
+    public function getFollowers($userID, $setOffset = 0, $displayCount = 100, $requestFields = self::standardFields, $nameCase = 'nom') {
         $requestParameters = [
             'user_id'   =>  $userID,
             'offset'    =>  $setOffset,
@@ -153,8 +153,7 @@ class VKUsers extends VKAPI {
      * @return mixed
      * @throws VKException
      */
-    public function getNearby($currentLatitude, $currentLongitude, $setTimeOut = 7200, $setRadius = 1, $requestFields = self::standardFields, $nameCase = 'nom'){
-        parent::isAllowed();
+    public function getNearby($currentLatitude, $currentLongitude, $setTimeOut = 7200, $setRadius = 1, $requestFields = self::standardFields, $nameCase = 'nom') {
         $requestParameters = [
             'latitude'  =>  $currentLatitude,
             'longitude' =>  $currentLongitude,
@@ -170,22 +169,29 @@ class VKUsers extends VKAPI {
     /**
      * Return fields which are allowed to be used
      * @param $fieldsArray
-     * @return mixed
+     * @return string
      */
-    private function returnAllowedFields($fieldsArray){
-        $allowedFields = ['photo_id', 'verified', 'sex', 'bdate', 'city', 'country', 'home_town', 'has_photo', 'photo_50', 'photo_100', 'photo_200_orig', 'photo_200', 'photo_400_orig', 'photo_max', 'photo_max_orig', 'online', 'lists', 'domain', 'has_mobile', 'contacts', 'site', 'education', 'universities', 'schools', 'status', 'last_seen', 'followers_count', 'common_count', 'occupation', 'nickname', 'relatives', 'relation', 'personal', 'connections', 'exports', 'wall_comments', 'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about', 'quotes', 'can_post', 'can_see_all_posts', 'can_see_audio', 'can_write_private_message', 'can_send_friend_request', 'is_favorite', 'is_hidden_from_feed', 'timezone', 'screen_name', 'maiden_name', 'crop_photo', 'is_friend', 'friend_status', 'career', 'military', 'blacklisted', 'blacklisted_by_me'];
-        foreach($fieldsArray as $fKey => $fValue){ if(!in_array($fValue, $allowedFields)) unset($fieldsArray[$fKey]); }
+    private function returnAllowedFields($fieldsArray) {
+        $allowedFields = [ 'photo_id', 'verified', 'sex', 'bdate', 'city', 'country', 'home_town', 'has_photo', 'photo_50', 'photo_100', 'photo_200_orig', 'photo_200', 'photo_400_orig', 'photo_max', 'photo_max_orig', 'online', 'lists', 'domain', 'has_mobile', 'contacts', 'site', 'education', 'universities', 'schools', 'status', 'last_seen', 'followers_count', 'common_count', 'occupation', 'nickname', 'relatives', 'relation', 'personal', 'connections', 'exports', 'wall_comments', 'activities', 'interests', 'music', 'movies', 'tv', 'books', 'games', 'about', 'quotes', 'can_post', 'can_see_all_posts', 'can_see_audio', 'can_write_private_message', 'can_send_friend_request', 'is_favorite', 'is_hidden_from_feed', 'timezone', 'screen_name', 'maiden_name', 'crop_photo', 'is_friend', 'friend_status', 'career', 'military', 'blacklisted', 'blacklisted_by_me' ];
+        foreach ($fieldsArray as $fKey => $fValue) { 
+            if (!in_array($fValue, $allowedFields)) { 
+                unset($fieldsArray[$fKey]); 
+            }
+        }
+
         return implode(',', $fieldsArray);
     }
 
     /**
      * Return Allowed Name Case
-     * @param $ncValue
+     * @param string $ncValue
      * @return string
      */
-    private function returnAllowedNC($ncValue){
+    private function returnAllowedNC($ncValue) {
         $allowedNameCases = ['nom', 'gen', 'dat', 'acc', 'ins', 'abl'];
-        if(!in_array($ncValue, $allowedNameCases))  $ncValue = 'nom';
+        if (!in_array($ncValue, $allowedNameCases)) {
+            $ncValue = 'nom';
+        }
         return $ncValue;
     }
 }
